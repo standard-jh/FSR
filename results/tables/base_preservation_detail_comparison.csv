@@ -1,16 +1,16 @@
 dataset,method,raw_psnr_rgb,raw_ssim_rgb,base_psnr,base_ssim,base_metric_space,base_l1_rgb,base_grad_l1,detail_proxy_1,detail_value_1,detail_proxy_2,detail_value_2,latent_or_feature_proxy,latent_or_feature_value
-Set5,DecoderFeatureFlowSR RF one-step,28.023959,0.813703,28.935057,0.894684,RGB downsample(output)->LR,0.024046,0.05763,hf_error_vs_vae,0.029374,hf_gain_vs_base_up,1.068754,f3 feature transport; no latent-channel metric,
+Set5,FSR RF one-step,28.023959,0.813703,28.935057,0.894684,RGB downsample(output)->LR,0.024046,0.05763,hf_error_vs_vae,0.029374,hf_gain_vs_base_up,1.068754,f3 feature transport; no latent-channel metric,
 Set5,LUA x2,27.987948,0.829716,32.023109,0.957354,Y downsample(output)->LR plus RGB L1,0.022401,0.014538,latent_all_cos,0.852265,latent_all_mse,2.366561,FLUX latent channel match,0.8522647261619568
 Set5,LSRNA x2,15.772142,0.390265,18.123162,0.557504,Y downsample(output)->LR plus RGB L1,0.110904,0.065234,latent_all_cos,0.571745,latent_all_mse,0.674936,SDXL latent channel match,0.5717452585697174
-Set14,DecoderFeatureFlowSR RF one-step,25.565366,0.705749,26.973165,0.829679,RGB downsample(output)->LR,0.031583,0.082528,hf_error_vs_vae,0.046023,hf_gain_vs_base_up,1.106541,f3 feature transport; no latent-channel metric,
+Set14,FSR RF one-step,25.565366,0.705749,26.973165,0.829679,RGB downsample(output)->LR,0.031583,0.082528,hf_error_vs_vae,0.046023,hf_gain_vs_base_up,1.106541,f3 feature transport; no latent-channel metric,
 Set14,LUA x2,26.085067,0.740613,31.019738,0.926168,Y downsample(output)->LR plus RGB L1,0.024216,0.015995,latent_all_cos,0.777199,latent_all_mse,2.713469,FLUX latent channel match,0.7771994130952018
 Set14,LSRNA x2,15.115699,0.374423,17.690607,0.502133,Y downsample(output)->LR plus RGB L1,0.114149,0.067353,latent_all_cos,0.562752,latent_all_mse,0.593194,SDXL latent channel match,0.5627519658633641
-B100,DecoderFeatureFlowSR RF one-step,25.284261,0.67418,26.737724,0.797316,RGB downsample(output)->LR,0.032539,0.090415,hf_error_vs_vae,0.052959,hf_gain_vs_base_up,1.135356,f3 feature transport; no latent-channel metric,
+B100,FSR RF one-step,25.284261,0.67418,26.737724,0.797316,RGB downsample(output)->LR,0.032539,0.090415,hf_error_vs_vae,0.052959,hf_gain_vs_base_up,1.135356,f3 feature transport; no latent-channel metric,
 B100,LUA x2,25.85043,0.71417,30.626199,0.902496,Y downsample(output)->LR plus RGB L1,0.023936,0.017208,latent_all_cos,0.753003,latent_all_mse,2.881187,FLUX latent channel match,0.7530026268959046
 B100,LSRNA x2,15.324637,0.370936,17.734683,0.466299,Y downsample(output)->LR plus RGB L1,0.113838,0.067772,latent_all_cos,0.547322,latent_all_mse,0.52557,SDXL latent channel match,0.547321652173996
-Urban100,DecoderFeatureFlowSR RF one-step,23.763718,0.738146,25.657963,0.858865,RGB downsample(output)->LR,0.034752,0.093091,hf_error_vs_vae,0.059519,hf_gain_vs_base_up,1.145541,f3 feature transport; no latent-channel metric,
+Urban100,FSR RF one-step,23.763718,0.738146,25.657963,0.858865,RGB downsample(output)->LR,0.034752,0.093091,hf_error_vs_vae,0.059519,hf_gain_vs_base_up,1.145541,f3 feature transport; no latent-channel metric,
 Urban100,LUA x2,24.985362,0.786103,30.265572,0.938908,Y downsample(output)->LR plus RGB L1,0.025154,0.016338,latent_all_cos,0.780933,latent_all_mse,2.630465,FLUX latent channel match,0.7809332501888275
 Urban100,LSRNA x2,14.253205,0.396492,16.882277,0.507196,Y downsample(output)->LR plus RGB L1,0.122037,0.076525,latent_all_cos,0.556437,latent_all_mse,0.698297,SDXL latent channel match,0.5564365975558758
-Manga109,DecoderFeatureFlowSR RF one-step,26.549028,0.838172,27.354755,0.897552,RGB downsample(output)->LR,0.027195,0.059811,hf_error_vs_vae,0.03079,hf_gain_vs_base_up,1.136902,f3 feature transport; no latent-channel metric,
+Manga109,FSR RF one-step,26.549028,0.838172,27.354755,0.897552,RGB downsample(output)->LR,0.027195,0.059811,hf_error_vs_vae,0.03079,hf_gain_vs_base_up,1.136902,f3 feature transport; no latent-channel metric,
 Manga109,LUA x2,27.468016,0.864717,31.186223,0.957002,Y downsample(output)->LR plus RGB L1,0.022682,0.01336,latent_all_cos,0.886083,latent_all_mse,2.060953,FLUX latent channel match,0.8860826957116433
 Manga109,LSRNA x2,15.384963,0.534405,18.42623,0.624221,Y downsample(output)->LR plus RGB L1,0.100524,0.058629,latent_all_cos,0.657694,latent_all_mse,0.734951,SDXL latent channel match,0.6576936931238262

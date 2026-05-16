@@ -11,32 +11,32 @@ git log --oneline -1
 To publish manually:
 
 ```bash
-cd /home/juhwan/Documents/sr/latent_sr/decoder-feature-flow-sr
+cd /home/juhwan/Documents/sr/latent_sr/FSR
 ```
 
 Create an empty GitHub repository named:
 
 ```text
-decoder-feature-flow-sr
+FSR
 ```
 
 Then push:
 
 ```bash
-git remote add origin https://github.com/<your-username>/decoder-feature-flow-sr.git
+git remote add origin https://github.com/<your-username>/FSR.git
 git push -u origin main
 ```
 
 If the GitHub CLI is installed and authenticated:
 
 ```bash
-gh repo create decoder-feature-flow-sr --public --source=. --remote=origin --push
+gh repo create FSR --public --source=. --remote=origin --push
 ```
 
 If the repository should stay private:
 
 ```bash
-gh repo create decoder-feature-flow-sr --private --source=. --remote=origin --push
+gh repo create FSR --private --source=. --remote=origin --push
 ```
 
 Notes:

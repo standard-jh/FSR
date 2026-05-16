@@ -7,7 +7,7 @@
     "img_0000004"
   ],
   "real_feature_dir": "/home/juhwan/Documents/sr/latent_sr/LUA/experiments/eval_flux_latent_4096_real_openimages_metrics_179v150/features",
-  "plot_path": "/home/juhwan/Documents/sr/latent_sr/decoder-feature-flow-sr/assets/openimages_visual5_fid_kid.png",
+  "plot_path": "/home/juhwan/Documents/sr/latent_sr/FSR/assets/openimages_visual5_fid_kid.png",
   "note": "Diagnostic only: RF/LUA/LSRNA shared subset has five generated images.",
   "rows": [
     {

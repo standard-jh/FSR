@@ -78,7 +78,7 @@ latent SR training program.
 
 | Method | Scope | Hardware | Wall-clock | GPU-hours | Steps / iters |
 |---|---|---:|---:|---:|---:|
-| DecoderFeatureFlowSR | this repo, x2 f3 | 1x RTX 3090 24GB | 9.98 h | 9.98 | 6063 |
+| FSR | this repo, x2 f3 | 1x RTX 3090 24GB | 9.98 h | 9.98 | 6063 |
 | LSRNA LSR module | paper v1 arbitrary-scale LSR | 1x V100-SXM2 | 26 h | 26 | 200K |
 | LUA latent upscaler | paper x2/x4 multi-scale adapter | 8x H100 80GB | 34.1 h | 272.8 | 375K |
 

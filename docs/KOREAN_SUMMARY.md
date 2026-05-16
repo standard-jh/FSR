@@ -1,5 +1,6 @@
-# 한국어 요약
+# FSR 한국어 요약
 
+FSR은 **Feature-Space Rectified Flow Super-Resolution**의 약자입니다.
 이 repository는 FLUX VAE decoder의 중간 feature space에서 rectified-flow
 vector field를 학습한 x2 super-resolution 실험을 정리한 것입니다.
 
@@ -65,7 +66,7 @@ RTX 3090 24GB 한 장에서 진행했습니다.
 
 | Method | 범위 | Hardware | Wall-clock | GPU-hours | Steps / iters | 데이터 |
 |---|---|---:|---:|---:|---:|---|
-| DecoderFeatureFlowSR | 이 repo, x2 f3 | 1x RTX 3090 24GB | 9.98 h | 9.98 | 6063 | DIV2K crop 약 48.5K presentation |
+| FSR | 이 repo, x2 f3 | 1x RTX 3090 24GB | 9.98 h | 9.98 | 6063 | DIV2K crop 약 48.5K presentation |
 | LSRNA LSR module | paper v1 arbitrary-scale LSR | 1x V100-SXM2 | 26 h | 26 | 200K | 4.7M LR-HR latent pairs |
 | LUA latent upscaler | paper x2/x4 multi-scale adapter | 8x H100 80GB | 34.1 h | 272.8 | 375K | 3.8M OpenImages latent pairs |
 
@@ -211,9 +212,9 @@ x2 기준으로는 기존 LUA full pipeline보다 빠르게 측정됐습니다.
 
 | Method | Input -> Output | Total |
 |---|---:|---:|
-| DecoderFeatureFlowSR | 512 -> 1024 | 300.8 ms |
+| FSR | 512 -> 1024 | 300.8 ms |
 | LUA x2 | 512 -> 1024 | 421.1 ms |
-| DecoderFeatureFlowSR | 1024 -> 2048 | 1.22 s |
+| FSR | 1024 -> 2048 | 1.22 s |
 | LUA x2 | 1024 -> 2048 | 1.93 s |
 
 다만 병목은 vector field 자체가 아니라 FLUX VAE decoder tail입니다.

@@ -1,4 +1,4 @@
 method,scope,hardware,wall_hours,gpu_count,gpu_hours,optimizer_steps,reported_train_pairs,source,notes
-DecoderFeatureFlowSR RF one-step,"this repo, x2 f3 prototype",1x RTX 3090 24GB,9.98,1,9.98,6063,"DIV2K crops, about 48.5K crop presentations (6063 steps x grad_accum 8)",local run summary,"Single selected f3 cut, x2 only, overnight hypothesis test."
+FSR RF one-step,"this repo, x2 f3 prototype",1x RTX 3090 24GB,9.98,1,9.98,6063,"DIV2K crops, about 48.5K crop presentations (6063 steps x grad_accum 8)",local run summary,"Single selected f3 cut, x2 only, overnight hypothesis test."
 LSRNA LSR module,"paper v1 latent SR module, arbitrary scale",1x NVIDIA Tesla V100-SXM2,26.0,1,26.0,200000,4.7M LR-HR latent pairs,arXiv:2503.18446 / CVPR 2025 supplement,LSR module only; LSRNA inference also uses RNA plus a guided denoising stage.
 LUA latent upscaler,paper multi-scale x2/x4 adapter,8x NVIDIA H100 80GB,34.1,8,272.8,375000,3.8M OpenImages latent pairs,arXiv:2511.10629,Three 125K-step stages; single checkpoint supports x2 and x4.

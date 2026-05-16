@@ -48,7 +48,7 @@ def font(size: int, bold: bool = False) -> ImageFont.FreeTypeFont:
 def load_metrics() -> Dict[str, Dict[str, float]]:
     alias = {
         "bicubic_x2": "Base x2",
-        "DecoderFeatureFlowSR RF one-step": "RF one-step (ours)",
+        "FSR RF one-step": "RF one-step (ours)",
         "LUA x2": "LUA x2",
         "LSRNA x2": "LSRNA x2",
     }
@@ -166,7 +166,7 @@ def make_representative() -> None:
 def write_training_cost_csv() -> None:
     rows = [
         {
-            "method": "DecoderFeatureFlowSR RF one-step",
+            "method": "FSR RF one-step",
             "scope": "this repo, x2 f3 prototype",
             "hardware": "1x RTX 3090 24GB",
             "wall_hours": 9.98,

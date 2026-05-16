@@ -1,6 +1,10 @@
-# Decoder Feature Flow SR
+# FSR
 
 **One-step rectified flow in a frozen VAE decoder feature space for x2 super-resolution.**
+
+FSR stands for **Feature-Space Rectified Flow Super-Resolution**: a compact
+name for the core idea tested here, moving decoder features directly with a
+learned rectified-flow vector field.
 
 This repository packages an overnight experiment that asks a narrow question:
 
@@ -179,7 +183,7 @@ and no large multi-scale pretraining. Even so, it reached the useful regime in
 
 | Method | Scope | Hardware | Wall-clock | GPU-hours | Steps / iters | Reported data |
 |---|---|---:|---:|---:|---:|---|
-| DecoderFeatureFlowSR | this repo, x2 f3 | 1x RTX 3090 24GB | 9.98 h | 9.98 | 6063 | DIV2K crops, about 48.5K crop presentations |
+| FSR | this repo, x2 f3 | 1x RTX 3090 24GB | 9.98 h | 9.98 | 6063 | DIV2K crops, about 48.5K crop presentations |
 | LSRNA LSR module | paper v1 arbitrary-scale LSR | 1x V100-SXM2 | 26 h | 26 | 200K | 4.7M LR-HR latent pairs |
 | LUA latent upscaler | paper x2/x4 multi-scale adapter | 8x H100 80GB | 34.1 h | 272.8 | 375K | 3.8M OpenImages latent pairs |
 
@@ -377,8 +381,8 @@ decoder tail is larger.
 
 | Method | Input -> Output | Total | Front/Encode | Vector/Model | Tail/Decode | Peak |
 |---|---:|---:|---:|---:|---:|---:|
-| DecoderFeatureFlowSR | 512 -> 1024 | 300.8 ms | 56.3 ms | 87.3 ms | 157.4 ms | 3.37 GiB |
-| DecoderFeatureFlowSR | 1024 -> 2048 | 1.22 s | 240.5 ms | 347.4 ms | 634.8 ms | 12.96 GiB |
+| FSR | 512 -> 1024 | 300.8 ms | 56.3 ms | 87.3 ms | 157.4 ms | 3.37 GiB |
+| FSR | 1024 -> 2048 | 1.22 s | 240.5 ms | 347.4 ms | 634.8 ms | 12.96 GiB |
 | LUA x2 | 512 -> 1024 | 421.1 ms | 31.3 ms | 140.6 ms | 249.3 ms | 2.79 GiB |
 | LUA x2 | 1024 -> 2048 | 1.93 s | 132.5 ms | 605.6 ms | 1192.2 ms | 9.94 GiB |
 
