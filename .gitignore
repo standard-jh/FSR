@@ -1,0 +1,24 @@
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+
+# Experiment outputs
+runs/
+wandb/
+outputs/
+checkpoints/
+*.pt
+*.pth
+*.safetensors
+
+# Local datasets and generated bulk images
+data/
+datasets/
+Urban100_full_outputs/
+
+# OS/editor
+.DS_Store
+.idea/
+.vscode/

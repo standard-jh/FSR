@@ -1,0 +1,27 @@
+{
+  "summary": {
+    "n": 100,
+    "height_mean": 793.12,
+    "width_mean": 983.2,
+    "feature_bicubic_psnr_vs_vae_mean": 20.022126035976143,
+    "rf_1step_psnr_vs_vae_mean": 24.11373579496433,
+    "rf_4step_psnr_vs_vae_mean": 23.87449742600414,
+    "feature_bicubic_ssim_vs_vae_mean": 0.5595140887796879,
+    "rf_1step_ssim_vs_vae_mean": 0.7488430491089821,
+    "rf_4step_ssim_vs_vae_mean": 0.7484249824285507,
+    "rf_1step_psnr_vs_raw_mean": 23.763590093100323,
+    "rf_4step_psnr_vs_raw_mean": 23.57005845654736,
+    "rgb_l1_bicubic_vs_vae_mean": 0.12861876435577868,
+    "rgb_l1_rf_1step_vs_vae_mean": 0.08163198223337531,
+    "rgb_l1_rf_4step_vs_vae_mean": 0.08364283140748739,
+    "gate_mean_mean": 0.9920783686637878
+  },
+  "failures": [],
+  "checkpoint": "runs/feature_rectified_flow_x2_f3_resume_bench_wandb/train_main/checkpoints/last.pt",
+  "cut": {
+    "name": "f3",
+    "stage": "up_blocks.1",
+    "level_def": "decoder.up_blocks.1 output",
+    "fallback_from": null
+  }
+}

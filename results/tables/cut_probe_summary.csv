@@ -1,0 +1,6 @@
+cut,decoder_stage,auto_score,rgb_l1_mean,high_frequency_error_mean,feature_fft_mean,decoder_sensitivity_mean,probe_vram_gib,selection_note
+f3,up_blocks.1,0.4707,0.09968,0.07354,2.13634,0.14372,1.083,selected stable/improvable cut
+f4,up_blocks.2,0.4315,0.06940,0.04755,3.77468,0.03831,1.721,second-best probe but 512 training OOM with default model
+f2,up_blocks.0,0.0014,0.12887,0.08451,0.63098,0.30649,0.864,large drift/sensitivity
+f1,conv_in,-0.5271,0.17867,0.08729,0.52488,0.42026,0.802,too early and unstable
+f5,conv_act,-0.7000,0.07063,0.04542,0.03181,0.48919,0.955,feature gap nearly collapsed and sensitivity high

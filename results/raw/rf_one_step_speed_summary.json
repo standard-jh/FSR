@@ -1,0 +1,56 @@
+{
+  "rows": [
+    {
+      "out_size": 512,
+      "iters": 5,
+      "front_ms": 15.680067997891456,
+      "vector_ms": 22.92903300258331,
+      "tail_ms": 39.55069700896274,
+      "total_ms": 78.15601000038441,
+      "peak_gib": 0.9779105186462402,
+      "shape": [
+        1,
+        3,
+        512,
+        512
+      ]
+    },
+    {
+      "out_size": 1024,
+      "iters": 4,
+      "front_ms": 56.29738900461234,
+      "vector_ms": 87.26065598602872,
+      "tail_ms": 157.40897800424136,
+      "total_ms": 300.80481100594625,
+      "peak_gib": 3.3733878135681152,
+      "shape": [
+        1,
+        3,
+        1024,
+        1024
+      ]
+    },
+    {
+      "out_size": 2048,
+      "iters": 2,
+      "front_ms": 240.53147299855482,
+      "vector_ms": 347.39313799946103,
+      "tail_ms": 634.8388269980205,
+      "total_ms": 1222.7634379960364,
+      "peak_gib": 12.955296993255615,
+      "shape": [
+        1,
+        3,
+        2048,
+        2048
+      ]
+    }
+  ],
+  "checkpoint": "runs/feature_rectified_flow_x2_f3_resume_bench_wandb/train_main/checkpoints/last.pt",
+  "cut": {
+    "name": "f3",
+    "stage": "up_blocks.1",
+    "level_def": "decoder.up_blocks.1 output",
+    "fallback_from": null
+  }
+}

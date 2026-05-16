@@ -1,0 +1,13 @@
+dataset,mode,psnr_vs_vae,ssim_vs_vae,rgb_l1_vs_vae,lpips_vs_vae,notes
+Set5,feature_bicubic,24.606,0.6974,0.07898,0.15612,baseline D_>f3(Bicubic(D_<=f3(E(LR))))
+Set5,rf_1step,28.478,0.8301,0.04984,0.07966,f_B + v_theta(f_B,t=0;cond=f_B)
+Set5,rf_4step,28.406,0.8291,0.05026,0.07698,4-step Euler in f3 feature space
+Set14,feature_bicubic,22.713,0.5895,0.09785,0.19393,baseline D_>f3(Bicubic(D_<=f3(E(LR))))
+Set14,rf_1step,26.161,0.7321,0.06857,0.09724,f_B + v_theta(f_B,t=0;cond=f_B)
+Set14,rf_4step,26.014,0.7315,0.06977,0.09133,4-step Euler in f3 feature space
+B100,feature_bicubic,22.465,0.5442,0.10204,0.23221,baseline D_>f3(Bicubic(D_<=f3(E(LR))))
+B100,rf_1step,25.516,0.6834,0.07373,0.14454,f_B + v_theta(f_B,t=0;cond=f_B)
+B100,rf_4step,25.347,0.6820,0.07528,0.13285,4-step Euler in f3 feature space
+Urban100,feature_bicubic,20.022,0.5595,0.12862,,baseline D_>f3(Bicubic(D_<=f3(E(LR))))
+Urban100,rf_1step,24.114,0.7488,0.08163,,f_B + v_theta(f_B,t=0;cond=f_B)
+Urban100,rf_4step,23.874,0.7484,0.08364,,4-step Euler in f3 feature space

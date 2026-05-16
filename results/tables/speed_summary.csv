@@ -1,0 +1,6 @@
+method,input_output,scale,total_ms,front_or_encode_ms,vector_or_model_ms,tail_or_decode_ms,peak_gib,notes
+DecoderFeatureFlowSR,512->1024,x2,300.8,56.3,87.3,157.4,3.37,FLUX VAE encode+front to f3 + RF one-step + decoder tail
+DecoderFeatureFlowSR,1024->2048,x2,1222.8,240.5,347.4,634.8,12.96,full-frame x2; decoder tail is largest component
+LUA,512->1024,x2,421.1,31.3,140.6,249.3,2.79,FLUX VAE encode + LUA latent x2 + full VAE decode
+LUA,1024->2048,x2,1928.7,132.5,605.6,1192.2,9.94,FLUX VAE encode + LUA latent x2 + full VAE decode
+SwinIR-M RGB,1024->4096,x4,3484.3,,, ,7.41,existing fp16 RGB SwinIR benchmark; not directly comparable to x2 RF

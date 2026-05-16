@@ -1,0 +1,30 @@
+{
+  "meta": {
+    "swinir_root": "third_party/SwinIR",
+    "variant": "classical",
+    "device": "cuda",
+    "gpu": "NVIDIA GeForce RTX 3090",
+    "dtype": "fp16",
+    "batch_size": 1,
+    "input_size": 1024,
+    "target_output_size": null,
+    "warmup": 3,
+    "iters": 10
+  },
+  "results": [
+    {
+      "scale": 4,
+      "variant": "classical",
+      "input_h": 1024,
+      "input_w": 1024,
+      "output_h": 4096,
+      "output_w": 4096,
+      "megapixels": 16.777216,
+      "median_ms": 3484.3253173828125,
+      "p95_ms": 3491.843994140625,
+      "min_ms": 3479.7783203125,
+      "max_ms": 3491.843994140625,
+      "peak_gib": 7.413427829742432
+    }
+  ]
+}

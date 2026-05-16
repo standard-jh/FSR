@@ -1,0 +1,6 @@
+phase,start_step,end_step,optimizer_steps_in_phase,wall_clock_hours,notes
+cut_probe,0,0,0,~0.02,probed f1-f5 on 32 DIV2K crops
+f3_warmup,0,2000,2000,3.26,top-2 ambiguity warm-up; f3 completed
+f4_warmup_attempt,0,0,0,,OOM at 512 with hidden=128 blocks=8 due f4 feature tensor 1x256x512x512
+f3_main_resume,2000,6063,4063,6.72,resumed from f3 warm-up last checkpoint
+total_f3_training,0,6063,6063,~9.98,one RTX 3090 overnight budget including warm-up and main run
