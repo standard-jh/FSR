@@ -169,6 +169,31 @@ W&B run:
 https://wandb.ai/standard_juhwan/feature-rectified-flow-sr/runs/sc1t0349
 ```
 
+### Training Cost In Context
+
+This was deliberately a small hypothesis test: one selected `f3` cut, x2 only,
+and no large multi-scale pretraining. Even so, it reached the useful regime in
+6063 optimizer steps on one RTX 3090.
+
+![Training cost comparison](assets/training_cost_comparison.png)
+
+| Method | Scope | Hardware | Wall-clock | GPU-hours | Steps / iters | Reported data |
+|---|---|---:|---:|---:|---:|---|
+| DecoderFeatureFlowSR | this repo, x2 f3 | 1x RTX 3090 24GB | 9.98 h | 9.98 | 6063 | DIV2K crops, about 48.5K crop presentations |
+| LSRNA LSR module | paper v1 arbitrary-scale LSR | 1x V100-SXM2 | 26 h | 26 | 200K | 4.7M LR-HR latent pairs |
+| LUA latent upscaler | paper x2/x4 multi-scale adapter | 8x H100 80GB | 34.1 h | 272.8 | 375K | 3.8M OpenImages latent pairs |
+
+The comparison is not apples-to-apples: LUA trains a multi-scale x2/x4 adapter,
+and LSRNA trains an arbitrary-scale LSR module for use with RNA and a guided
+denoising stage. The useful point is narrower: this decoder-feature RF prototype
+was much cheaper to validate as a one-step x2 transport hypothesis.
+
+Sources: [LUA arXiv 2511.10629](https://arxiv.org/abs/2511.10629) reports
+3.8M pairs, three 125K-step stages, and 8x H100 training; the
+[LSRNA CVPR 2025 paper/supplement](https://openaccess.thecvf.com/content/CVPR2025/papers/Jeong_Latent_Space_Super-Resolution_for_Higher-Resolution_Image_Generation_with_Diffusion_Models_CVPR_2025_paper.pdf)
+reports 4.7M LR-HR latent pairs and the v1 200K-iteration, 26-hour V100 LSR
+training setting.
+
 ## Results
 
 The main result is the one-step feature-space rectified flow. Four-step Euler is
@@ -272,6 +297,17 @@ a diagnostic artifact from the run and includes extra columns such as four-step
 Euler and feature-delta maps; the main comparison in this README is the table
 above against LUA and LSRNA.
 
+Representative base/detail crop:
+
+![Representative base/detail crop](assets/representative_base_detail_crop.png)
+
+For `img_0000000` from the generated FLUX visual subset, RF one-step preserves
+the base nearly as well as LUA while adding more local high-frequency energy:
+RF has base L1 `0.0113` and HF gain `1.61x`; LUA has base L1 `0.0091` and HF
+gain `0.71x`; LSRNA reaches HF gain `1.90x` but drifts far from the base
+(base L1 `0.2832`). This is the behavior we wanted to isolate: detail creation
+inside the latent/decoder-feature path without losing the generated base.
+
 Generated FLUX x2 comparison:
 
 ![Generated FLUX x2 comparison](assets/generated_flux179_rf_lua_lsrna/img_0000000_rf_lua_lsrna_panel.png)
@@ -339,7 +375,13 @@ python scripts/evaluate_base_detail_rf.py \
   --generated_root /path/to/flux_random_1024_merged_179/images
 ```
 
-The script writes:
+Rebuild README figures and the training-cost table:
+
+```bash
+python scripts/make_representative_figures.py
+```
+
+The main training script writes:
 
 ```text
 probe/probe_metrics.csv
@@ -360,6 +402,7 @@ Checkpoints are intentionally ignored by git. Put them under `checkpoints/` or
 ```text
 scripts/train_feature_rectified_flow_sr.py  # main experiment script
 scripts/evaluate_base_detail_rf.py          # post-hoc base/detail evaluator
+scripts/make_representative_figures.py      # README figures and training-cost chart
 configs/                                # runnable command templates
 docs/                                   # formulation and experiment notes
 assets/                                 # representative visual outputs

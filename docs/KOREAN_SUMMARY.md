@@ -59,6 +59,24 @@ RTX 3090 24GB 한 장에서 진행했습니다.
 즉, 약 10시간 / 6063 optimizer steps만으로 feature bicubic 대비 명확한
 개선이 나왔습니다.
 
+논문에 보고된 latent SR 계열 학습 budget과 나란히 놓으면 다음과 같습니다.
+
+![학습 비용 비교](../assets/training_cost_comparison.png)
+
+| Method | 범위 | Hardware | Wall-clock | GPU-hours | Steps / iters | 데이터 |
+|---|---|---:|---:|---:|---:|---|
+| DecoderFeatureFlowSR | 이 repo, x2 f3 | 1x RTX 3090 24GB | 9.98 h | 9.98 | 6063 | DIV2K crop 약 48.5K presentation |
+| LSRNA LSR module | paper v1 arbitrary-scale LSR | 1x V100-SXM2 | 26 h | 26 | 200K | 4.7M LR-HR latent pairs |
+| LUA latent upscaler | paper x2/x4 multi-scale adapter | 8x H100 80GB | 34.1 h | 272.8 | 375K | 3.8M OpenImages latent pairs |
+
+이 비교는 완전히 같은 조건의 leaderboard가 아닙니다. LUA는 x2/x4 multi-scale
+adapter이고, LSRNA는 arbitrary-scale LSR module과 RNA/denoising stage를
+위한 구성입니다. 그래도 이 실험의 포인트는 분명합니다. 우리가 확인하고 싶었던
+"decoder feature f3에서 one-step rectified-flow transport가 되는가?"라는
+가설은 훨씬 작은 학습 비용으로 빠르게 검증됐습니다.
+
+출처는 LUA arXiv 2511.10629와 LSRNA CVPR 2025 paper/supplement입니다.
+
 ## 결과
 
 VAE reconstruction target 기준입니다.
@@ -136,6 +154,18 @@ inference로도 돌렸습니다. 전체 179장 기준:
 해석하면 RF는 생성형 x2에서 LUA와 비슷한 수준으로 base를 유지하면서, LUA보다
 high-frequency 변화량이 더 큽니다. 반면 이 LSRNA snapshot은 high-frequency
 변화는 크지만 global/base가 많이 바뀌는 쪽입니다.
+
+대표 crop figure도 새로 만들었습니다.
+
+![대표 base/detail crop](../assets/representative_base_detail_crop.png)
+
+이 그림은 FLUX179 visual subset의 `img_0000000`에서 sharp한 crop을 크게
+보여줍니다. RF one-step은 base L1 `0.0113`, HF gain `1.61x`이고,
+LUA는 base L1 `0.0091`, HF gain `0.71x`입니다. 즉 LUA가 base를 아주
+조금 더 잘 붙잡지만 detail 생성량은 RF가 더 큽니다. LSRNA는 HF gain이
+`1.90x`로 크지만 base L1이 `0.2832`라 전체 구조가 크게 달라집니다.
+우리가 원했던 "base를 유지하면서 decoder feature 쪽에서 detail이 생기는"
+주장을 한 장으로 보여주기 위한 대표 이미지입니다.
 
 생성형 비교 이미지는 다음 위치에 저장했습니다.
 

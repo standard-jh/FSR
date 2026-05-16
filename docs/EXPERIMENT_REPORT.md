@@ -71,6 +71,21 @@ This made f3 the practical choice for the overnight run.
 
 The main run stopped by time budget at step 6063 and saved final checkpoints.
 
+## Training Cost Context
+
+This run was a compact x2/f3 hypothesis test rather than a full multi-scale
+latent SR training program.
+
+| Method | Scope | Hardware | Wall-clock | GPU-hours | Steps / iters |
+|---|---|---:|---:|---:|---:|
+| DecoderFeatureFlowSR | this repo, x2 f3 | 1x RTX 3090 24GB | 9.98 h | 9.98 | 6063 |
+| LSRNA LSR module | paper v1 arbitrary-scale LSR | 1x V100-SXM2 | 26 h | 26 | 200K |
+| LUA latent upscaler | paper x2/x4 multi-scale adapter | 8x H100 80GB | 34.1 h | 272.8 | 375K |
+
+The paper budgets are broader tasks: LSRNA trains an arbitrary-scale latent SR
+module, and LUA trains a multi-scale x2/x4 adapter. Still, this run is much
+cheaper as a validation of the one-step decoder-feature RF hypothesis.
+
 ## Internal Validation
 
 Final internal validation against `x_H_rec`:
@@ -133,6 +148,17 @@ inference. This matches the existing generated x2 visual setup.
 On the shared generated 5-image visual subset, RF preserves base nearly as well
 as LUA while increasing high-frequency energy more than LUA. LSRNA changes
 global content in this subset, which shows up as very poor base PSNR/SSIM.
+
+Representative figure:
+
+```text
+assets/representative_base_detail_crop.png
+```
+
+For generated `img_0000000`, RF one-step has base L1 0.0113 and HF gain 1.61x,
+LUA has base L1 0.0091 and HF gain 0.71x, and LSRNA has base L1 0.2832 and HF
+gain 1.90x. This illustrates the intended regime: keep the base close while
+creating decoder-feature detail.
 
 ## Interpretation
 
