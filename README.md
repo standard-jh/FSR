@@ -290,13 +290,32 @@ preservation on generated x2 samples, while increasing high-frequency energy
 more than LUA. LSRNA has strong high-frequency change but poor base
 preservation in this generated visual subset.
 
-### OpenImages-Reference Distribution Metrics
+### OpenImages-Reference Distribution Diagnostic
 
 We also computed Inception-space FID/KID and patch-level pFID/pKID against the
 cached real OpenImages HR feature distribution used by the local LUA evaluation.
 This table uses the shared generated visual subset where RF, LUA, and LSRNA
 outputs all exist (`n=5` images, `80` generated patches), so it is a diagnostic
 distribution check rather than a leaderboard.
+
+Important: this is **not** the LUA paper protocol table. It does not use the
+paper's full generated set, does not evaluate 1024/2048/4096 method families,
+and does not include CLIP or comparable end-to-end timing. It was computed only
+from saved visual samples `img_0000000` to `img_0000004` because those are the
+only generated x2 images currently present for all three methods RF, LUA, and
+LSRNA in this workspace.
+
+Protocol used here:
+
+- Real reference: cached OpenImages HR Inception features,
+  `150` real images and `2400` real patches.
+- Generated set: `5` shared visual samples and `80` generated patches.
+- Feature extractor: torchvision InceptionV3 ImageNet weights, final FC
+  replaced by identity.
+- Full-image FID/KID: each generated output resized to `2048` then to
+  Inception `299`.
+- Patch FID/KID: `16` deterministic/random `224 x 224` patches per image,
+  resized to Inception `299`.
 
 ![OpenImages visual5 FID/KID](assets/openimages_visual5_fid_kid.png)
 
@@ -313,6 +332,12 @@ more photo-real distribution, but the base/detail table above shows that this
 comes with large content drift. RF is slightly better than LUA on patch
 distribution metrics in this tiny subset while preserving the generated base far
 better than LSRNA.
+
+For a paper-style comparison like the LUA table, RF, LUA, and LSRNA must be
+re-run on the same prompt/image set at the same target resolution, then scored
+with the same real OpenImages reference, patch sampling, CLIP model, and timing
+protocol. The current workspace does not contain a full matched LSRNA x2 output
+set; it only contains the 5-image generated visual overlap above.
 
 ## Visuals
 

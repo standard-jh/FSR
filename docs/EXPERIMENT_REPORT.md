@@ -151,6 +151,12 @@ global content in this subset, which shows up as very poor base PSNR/SSIM.
 
 OpenImages-reference distribution metrics on that same 5-image overlap:
 
+This is not the LUA paper protocol. It uses only the five saved generated x2
+visual samples where RF, LUA, and LSRNA outputs all exist in this workspace. The
+real reference is the cached local OpenImages HR Inception feature set
+(`150` full images and `2400` patches), and generated pFID/pKID uses `16`
+`224 x 224` patches per image, for `80` generated patches total.
+
 | Method | FID | KID x1000 | pFID | pKID x1000 |
 |---|---:|---:|---:|---:|
 | bicubic x2 | 472.6 | 58.1 | 236.2 | 45.1 |
@@ -162,6 +168,11 @@ This metric favors LSRNA because it moves toward a more real-image-like
 distribution, but the base/detail metrics show that this is achieved with large
 base drift. RF is slightly better than LUA on patch distribution metrics in this
 small diagnostic subset.
+
+A paper-style LUA comparison would require full matched RF/LUA/LSRNA outputs at
+the same resolutions, plus the same OpenImages reference, patch sampling, CLIP
+score, and timing protocol. The current workspace only has a five-image matched
+LSRNA/RF/LUA generated x2 overlap.
 
 Representative figure:
 

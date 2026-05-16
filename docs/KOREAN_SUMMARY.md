@@ -156,8 +156,19 @@ high-frequency 변화량이 더 큽니다. 반면 이 LSRNA snapshot은 high-fre
 변화는 크지만 global/base가 많이 바뀌는 쪽입니다.
 
 OpenImages real HR feature distribution을 reference로 둔 FID/KID/pFID/pKID도
-추가했습니다. RF/LUA/LSRNA 출력이 모두 있는 공통 subset이 5장뿐이라
-leaderboard가 아니라 diagnostic distribution check입니다.
+추가했습니다. 단, 이 표는 LUA 논문 table과 같은 protocol이 아닙니다.
+RF/LUA/LSRNA 출력이 모두 있는 공통 subset이 5장뿐이라 leaderboard가 아니라
+diagnostic distribution check입니다.
+
+여기서 사용한 기준은 다음입니다.
+
+- real reference: cached OpenImages HR Inception feature `150`장,
+  patch feature `2400`개
+- generated set: `img_0000000`부터 `img_0000004`까지 5장
+- generated patches: 이미지당 `16`개, 총 `80`개
+- feature extractor: torchvision InceptionV3 ImageNet weights, fc identity
+- full-image metric: 각 output을 `2048` 기준으로 맞춘 뒤 Inception `299`로 resize
+- patch metric: `224 x 224` patch를 Inception `299`로 resize
 
 ![OpenImages visual5 FID/KID](../assets/openimages_visual5_fid_kid.png)
 
@@ -174,6 +185,11 @@ OpenImages real distribution에 가까워졌다는 뜻이지, 원래 generated b
 base L1과 SSIM이 크게 나빠집니다. 따라서 이 결과는 "분포상 더 real-like한
 이미지"와 "원래 base를 유지하는 SR" 사이의 trade-off를 보여주는 보조 지표로
 해석하는 것이 맞습니다.
+
+LUA 논문 표처럼 비교하려면 RF/LUA/LSRNA를 같은 prompt/image set, 같은
+해상도 family, 같은 OpenImages reference, 같은 patch sampling, 같은 CLIP
+model, 같은 timing protocol로 다시 평가해야 합니다. 현재 workspace에는
+LSRNA의 full matched x2 output이 없고, 공통으로 있는 것은 위 5장뿐입니다.
 
 대표 crop figure도 새로 만들었습니다.
 
