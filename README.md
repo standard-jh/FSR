@@ -290,61 +290,55 @@ preservation on generated x2 samples, while increasing high-frequency energy
 more than LUA. LSRNA has strong high-frequency change but poor base
 preservation in this generated visual subset.
 
-### OpenImages-Reference Distribution Diagnostic
+### Paper-Style OpenImages x2 Metrics
 
-We also computed Inception-space FID/KID and patch-level pFID/pKID against the
-cached real OpenImages HR feature distribution used by the local LUA evaluation.
-This table uses the shared generated visual subset where RF, LUA, and LSRNA
-outputs all exist (`n=5` images, `80` generated patches), so it is a diagnostic
-distribution check rather than a leaderboard.
+We re-ran the generated-image distribution evaluation in the same style as the
+LUA paper table: FID, pFID, KID, pKID, CLIP, and runtime. This is now the
+headline OpenImages distribution result, replacing the earlier 5-image visual
+diagnostic.
 
-Important: this is **not** the LUA paper protocol table. It does not use the
-paper's full generated set, does not evaluate 1024/2048/4096 method families,
-and does not include CLIP or comparable end-to-end timing. It was computed only
-from saved visual samples `img_0000000` to `img_0000004` because those are the
-only generated x2 images currently present for all three methods RF, LUA, and
-LSRNA in this workspace.
+Protocol:
 
-Protocol used here:
-
+- Generated set: all `179` saved FLUX 1024 latent/prompt records.
+- Target setting: x2, `1024 -> 2048`.
 - Real reference: cached OpenImages HR Inception features,
-  `150` real images and `2400` real patches.
-- Generated set: `5` shared visual samples and `80` generated patches.
+  `150` full images and `2400` patches.
+- Generated patches: `16` patches per generated image, `2864` total patches.
 - Feature extractor: torchvision InceptionV3 ImageNet weights, final FC
   replaced by identity.
-- Full-image FID/KID: each generated output resized to `2048` then to
-  Inception `299`.
-- Patch FID/KID: `16` deterministic/random `224 x 224` patches per image,
-  resized to Inception `299`.
+- CLIP: `openai/clip-vit-base-patch32`, image-text cosine against the saved
+  FLUX prompt.
 
-![OpenImages visual5 FID/KID](assets/openimages_visual5_fid_kid.png)
+| Resolution | Method | FID ↓ | pFID ↓ | KID ↓ | pKID ↓ | CLIP ↑ | Time (s) ↓ |
+|---|---|---:|---:|---:|---:|---:|---:|
+| 2048x2048 | bicubic x2 | 309.00 | 113.12 | 0.06830 | 0.03735 | 0.3455 | 0.000 |
+| 2048x2048 | RF f3 one-step | 308.86 | 105.70 | 0.06792 | 0.03386 | 0.3453 | 1.31 |
+| 2048x2048 | LUA x2 | 309.20 | 120.61 | 0.06860 | 0.04369 | 0.3459 | 0.88 |
 
-| Method | FID | KID x1000 | pFID | pKID x1000 |
-|---|---:|---:|---:|---:|
-| bicubic x2 | 472.6 | 58.1 | 236.2 | 45.1 |
-| RF one-step | 475.2 | 56.5 | 229.6 | 42.1 |
-| LUA x2 | 479.9 | 64.0 | 252.8 | 56.4 |
-| LSRNA x2 | 419.3 | 34.1 | 211.7 | 24.8 |
+Interpretation:
 
-The important reading is the tension between distribution realism and base
-preservation. LSRNA looks best by OpenImages FID/KID because it drifts toward a
-more photo-real distribution, but the base/detail table above shows that this
-comes with large content drift. RF is slightly better than LUA on patch
-distribution metrics in this tiny subset while preserving the generated base far
-better than LSRNA.
+- RF one-step is best on patch distribution metrics (`pFID`, `pKID`), which are
+  the most sensitive to local texture/detail at the target resolution.
+- Full-image FID and CLIP are effectively tied across the three methods.
+- LUA is faster in this local timing because it starts from the saved FLUX
+  latent, while RF starts from the decoded 1024 RGB base and re-enters the FLUX
+  VAE feature path.
+- The runtime is the x2 stage only, not full text-to-image generation time.
 
-For a paper-style comparison like the LUA table, RF, LUA, and LSRNA must be
-re-run on the same prompt/image set at the same target resolution, then scored
-with the same real OpenImages reference, patch sampling, CLIP model, and timing
-protocol. The current workspace does not contain a full matched LSRNA x2 output
-set; it only contains the 5-image generated visual overlap above.
+This still is not the exact LUA paper table: our run is FLUX-latent x2 only,
+not SDXL 1024/2048/4096 generation. A full matched LSRNA row is also not listed
+because this workspace only has 5 saved LSRNA generated x2 samples. Those saved
+LSRNA samples took about `109 s/image`, so generating the full 179-image matched
+set would take roughly 5.4 hours before metric extraction.
 
 ## Visuals
 
 Representative images are committed under `assets/`. The Set5 butterfly grid is
 a diagnostic artifact from the run and includes extra columns such as four-step
-Euler and feature-delta maps; the main comparison in this README is the table
-above against LUA and LSRNA.
+Euler and feature-delta maps; the main distribution comparison in this README is
+the paper-style x2 table above against LUA, while LSRNA is kept as a 5-image
+base/detail visual diagnostic because a full matched LSRNA output set is not
+available locally.
 
 Representative base/detail crop:
 
@@ -430,8 +424,16 @@ Rebuild README figures and the training-cost table:
 python scripts/make_representative_figures.py
 ```
 
-Compute the OpenImages-reference FID/KID diagnostic for the shared generated
-visual subset:
+Compute the paper-style OpenImages x2 metrics:
+
+```bash
+python scripts/evaluate_x2_paper_style_openimages.py \
+  --output_dir results/paper_style_openimages_x2_full \
+  --methods bicubic_x2 RF_f3_one_step_x2 LUA_x2_to_2048 \
+  --save_images 5
+```
+
+The older 5-image visual diagnostic can still be rebuilt with:
 
 ```bash
 python scripts/evaluate_openimages_visual_subset_metrics.py
@@ -458,6 +460,7 @@ Checkpoints are intentionally ignored by git. Put them under `checkpoints/` or
 ```text
 scripts/train_feature_rectified_flow_sr.py  # main experiment script
 scripts/evaluate_base_detail_rf.py          # post-hoc base/detail evaluator
+scripts/evaluate_x2_paper_style_openimages.py  # paper-style FID/pFID/KID/pKID/CLIP
 scripts/evaluate_openimages_visual_subset_metrics.py  # FID/KID diagnostic
 scripts/make_representative_figures.py      # README figures and training-cost chart
 configs/                                # runnable command templates

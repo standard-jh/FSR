@@ -155,41 +155,36 @@ inference로도 돌렸습니다. 전체 179장 기준:
 high-frequency 변화량이 더 큽니다. 반면 이 LSRNA snapshot은 high-frequency
 변화는 크지만 global/base가 많이 바뀌는 쪽입니다.
 
-OpenImages real HR feature distribution을 reference로 둔 FID/KID/pFID/pKID도
-추가했습니다. 단, 이 표는 LUA 논문 table과 같은 protocol이 아닙니다.
-RF/LUA/LSRNA 출력이 모두 있는 공통 subset이 5장뿐이라 leaderboard가 아니라
-diagnostic distribution check입니다.
+OpenImages distribution metric은 다시 논문 table 스타일로 뽑았습니다.
+이제 5장 visual subset이 아니라, 저장된 FLUX 1024 latent/prompt 전체
+`179`장을 사용했습니다.
 
-여기서 사용한 기준은 다음입니다.
+사용한 기준은 다음입니다.
 
+- generated set: FLUX 1024 latent/prompt `179`장
+- target setting: x2, `1024 -> 2048`
 - real reference: cached OpenImages HR Inception feature `150`장,
   patch feature `2400`개
-- generated set: `img_0000000`부터 `img_0000004`까지 5장
-- generated patches: 이미지당 `16`개, 총 `80`개
+- generated patches: 이미지당 `16`개, 총 `2864`개
 - feature extractor: torchvision InceptionV3 ImageNet weights, fc identity
-- full-image metric: 각 output을 `2048` 기준으로 맞춘 뒤 Inception `299`로 resize
-- patch metric: `224 x 224` patch를 Inception `299`로 resize
+- CLIP: `openai/clip-vit-base-patch32`
 
-![OpenImages visual5 FID/KID](../assets/openimages_visual5_fid_kid.png)
+| Resolution | Method | FID ↓ | pFID ↓ | KID ↓ | pKID ↓ | CLIP ↑ | Time (s) ↓ |
+|---|---|---:|---:|---:|---:|---:|---:|
+| 2048x2048 | bicubic x2 | 309.00 | 113.12 | 0.06830 | 0.03735 | 0.3455 | 0.000 |
+| 2048x2048 | RF f3 one-step | 308.86 | 105.70 | 0.06792 | 0.03386 | 0.3453 | 1.31 |
+| 2048x2048 | LUA x2 | 309.20 | 120.61 | 0.06860 | 0.04369 | 0.3459 | 0.88 |
 
-| Method | FID | KID x1000 | pFID | pKID x1000 |
-|---|---:|---:|---:|---:|
-| bicubic x2 | 472.6 | 58.1 | 236.2 | 45.1 |
-| RF one-step | 475.2 | 56.5 | 229.6 | 42.1 |
-| LUA x2 | 479.9 | 64.0 | 252.8 | 56.4 |
-| LSRNA x2 | 419.3 | 34.1 | 211.7 | 24.8 |
+해석하면 RF one-step은 local texture/detail에 민감한 pFID/pKID에서 bicubic과
+LUA보다 좋습니다. full-image FID와 CLIP은 세 방법이 거의 같은 범위입니다.
+다만 이 time은 전체 text-to-image generation 시간이 아니라 x2 stage 시간입니다.
+또 LUA는 저장된 FLUX latent에서 바로 시작하고, RF는 decoded 1024 RGB base를
+다시 FLUX VAE feature path로 넣기 때문에 시간 비교는 입력 representation이
+완전히 같지는 않습니다.
 
-여기서는 LSRNA가 FID/KID 기준으로 가장 좋게 나옵니다. 다만 이것은
-OpenImages real distribution에 가까워졌다는 뜻이지, 원래 generated base를
-잘 지켰다는 뜻은 아닙니다. 바로 위 base/detail table에서 보듯 LSRNA는
-base L1과 SSIM이 크게 나빠집니다. 따라서 이 결과는 "분포상 더 real-like한
-이미지"와 "원래 base를 유지하는 SR" 사이의 trade-off를 보여주는 보조 지표로
-해석하는 것이 맞습니다.
-
-LUA 논문 표처럼 비교하려면 RF/LUA/LSRNA를 같은 prompt/image set, 같은
-해상도 family, 같은 OpenImages reference, 같은 patch sampling, 같은 CLIP
-model, 같은 timing protocol로 다시 평가해야 합니다. 현재 workspace에는
-LSRNA의 full matched x2 output이 없고, 공통으로 있는 것은 위 5장뿐입니다.
+LSRNA는 full matched row를 넣지 않았습니다. 현재 workspace에는 공통 LSRNA
+generated x2 output이 5장뿐이고, 그 5장 기준 시간이 약 `109 s/image`라
+179장을 새로 생성하려면 metric 추출 전 generation만 약 5.4시간이 필요합니다.
 
 대표 crop figure도 새로 만들었습니다.
 

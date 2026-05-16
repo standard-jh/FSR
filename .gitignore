@@ -9,6 +9,8 @@ runs/
 wandb/
 outputs/
 checkpoints/
+results/paper_style_openimages_x2_full/
+results/paper_style_openimages_x2_smoke/
 *.pt
 *.pth
 *.safetensors

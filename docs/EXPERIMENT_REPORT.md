@@ -149,30 +149,25 @@ On the shared generated 5-image visual subset, RF preserves base nearly as well
 as LUA while increasing high-frequency energy more than LUA. LSRNA changes
 global content in this subset, which shows up as very poor base PSNR/SSIM.
 
-OpenImages-reference distribution metrics on that same 5-image overlap:
+Paper-style OpenImages x2 distribution metrics:
 
-This is not the LUA paper protocol. It uses only the five saved generated x2
-visual samples where RF, LUA, and LSRNA outputs all exist in this workspace. The
-real reference is the cached local OpenImages HR Inception feature set
-(`150` full images and `2400` patches), and generated pFID/pKID uses `16`
-`224 x 224` patches per image, for `80` generated patches total.
+This re-run uses all 179 saved FLUX 1024 latent/prompt records, the cached real
+OpenImages HR reference (`150` images, `2400` patches), `16` generated patches
+per image (`2864` total), torchvision InceptionV3 features, and
+`openai/clip-vit-base-patch32` CLIP scores.
 
-| Method | FID | KID x1000 | pFID | pKID x1000 |
-|---|---:|---:|---:|---:|
-| bicubic x2 | 472.6 | 58.1 | 236.2 | 45.1 |
-| RF one-step | 475.2 | 56.5 | 229.6 | 42.1 |
-| LUA x2 | 479.9 | 64.0 | 252.8 | 56.4 |
-| LSRNA x2 | 419.3 | 34.1 | 211.7 | 24.8 |
+| Resolution | Method | FID | pFID | KID | pKID | CLIP | Time (s) |
+|---|---|---:|---:|---:|---:|---:|---:|
+| 2048x2048 | bicubic x2 | 309.00 | 113.12 | 0.06830 | 0.03735 | 0.3455 | 0.000 |
+| 2048x2048 | RF f3 one-step | 308.86 | 105.70 | 0.06792 | 0.03386 | 0.3453 | 1.31 |
+| 2048x2048 | LUA x2 | 309.20 | 120.61 | 0.06860 | 0.04369 | 0.3459 | 0.88 |
 
-This metric favors LSRNA because it moves toward a more real-image-like
-distribution, but the base/detail metrics show that this is achieved with large
-base drift. RF is slightly better than LUA on patch distribution metrics in this
-small diagnostic subset.
-
-A paper-style LUA comparison would require full matched RF/LUA/LSRNA outputs at
-the same resolutions, plus the same OpenImages reference, patch sampling, CLIP
-score, and timing protocol. The current workspace only has a five-image matched
-LSRNA/RF/LUA generated x2 overlap.
+RF is best on patch distribution metrics in this x2 local protocol, while
+full-image FID and CLIP remain essentially tied. Runtime is the x2 stage only,
+not full text-to-image generation. LSRNA is omitted from this table because the
+workspace does not contain full matched LSRNA x2 outputs; the saved 5 examples
+take about 109 seconds per image, so a 179-image matched run would take roughly
+5.4 hours before metric extraction.
 
 Representative figure:
 

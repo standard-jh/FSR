@@ -1,0 +1,62 @@
+{
+  "experiment": "evaluate_x2_paper_style_openimages",
+  "note": "Local paper-style protocol for FLUX 1024 saved latent x2 outputs; not the exact LUA paper table.",
+  "latent_root": "/home/juhwan/Documents/sr/latent_sr/FALSR/output/flux_random_1024_merged_179_20260501",
+  "real_feature_dir": "/home/juhwan/Documents/sr/latent_sr/LUA/experiments/eval_flux_latent_4096_real_openimages_metrics_179v150/features",
+  "checkpoint": "/home/juhwan/Documents/sr/latent_sr/runs/feature_rectified_flow_x2_f3_resume_bench_wandb/train_main/checkpoints/last.pt",
+  "methods": [
+    "bicubic_x2",
+    "RF_f3_one_step_x2",
+    "LUA_x2_to_2048"
+  ],
+  "num_records": 179,
+  "patch_size": 224,
+  "patches_per_image": 16,
+  "summary": [
+    {
+      "resolution": "2048x2048",
+      "method": "bicubic_x2",
+      "n_real_images": 150,
+      "n_generated_images": 179,
+      "n_real_patches": 2400,
+      "n_generated_patches": 2864,
+      "FID": 308.99817091384,
+      "pFID": 113.1202564225834,
+      "KID": 0.0682980344629267,
+      "pKID": 0.037352843461211815,
+      "CLIP": 0.345479809871599,
+      "time_sec_mean": 4.5341408652820565e-05,
+      "time_sec_median": 3.8955011405050755e-05
+    },
+    {
+      "resolution": "2048x2048",
+      "method": "RF_f3_one_step_x2",
+      "n_real_images": 150,
+      "n_generated_images": 179,
+      "n_real_patches": 2400,
+      "n_generated_patches": 2864,
+      "FID": 308.8622747558581,
+      "pFID": 105.70491856425542,
+      "KID": 0.06792059142404439,
+      "pKID": 0.03386263410428958,
+      "CLIP": 0.3452881739459224,
+      "time_sec_mean": 1.3080727983968183,
+      "time_sec_median": 1.3076276150241029
+    },
+    {
+      "resolution": "2048x2048",
+      "method": "LUA_x2_to_2048",
+      "n_real_images": 150,
+      "n_generated_images": 179,
+      "n_real_patches": 2400,
+      "n_generated_patches": 2864,
+      "FID": 309.19916908172564,
+      "pFID": 120.61414793487978,
+      "KID": 0.06859946557295649,
+      "pKID": 0.0436927166562846,
+      "CLIP": 0.3459302658142324,
+      "time_sec_mean": 0.8765455502737053,
+      "time_sec_median": 0.8683628780127037
+    }
+  ]
+}
