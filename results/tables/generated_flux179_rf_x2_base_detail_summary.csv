@@ -1,0 +1,3 @@
+dataset,mode,num_images,base_psnr_rgb,base_ssim_rgb,base_l1_rgb,base_grad_l1,hf_energy,hf_gain_vs_base_up,lf_drift_vs_base
+FLUX179_x2_unpaired,feature_bicubic,179,31.380181,0.90478,0.015331,0.029553,0.016692,1.757811,0.015856
+FLUX179_x2_unpaired,rf_1step,179,34.245155,0.945987,0.013597,0.020782,0.010574,1.15602,0.020007

@@ -33,12 +33,19 @@ The benchmark paths used locally were:
 /home/juhwan/Documents/sr/BasicSR/datasets/Set14
 /home/juhwan/Documents/sr/BasicSR/datasets/B100
 /home/juhwan/Documents/sr/BasicSR/datasets/Urban100
+/home/juhwan/Documents/sr/BasicSR/datasets/Manga109
+/home/juhwan/Documents/sr/latent_sr/FALSR/output/flux_random_1024_merged_179_20260501/images
 ```
 
 Resolution handling:
 
 - Set5/Set14 use `GTmod12` when available.
-- B100 and Urban100 use `HR` when available.
+- B100, Urban100, and Manga109 use `HR` when available.
+- FLUX179 is a generated FLUX image set. In the paired benchmark, each 1024px
+  image is treated as the HR target and downsampled to 512px. In the generated
+  visual/base-preservation study, the same 1024px images are treated as LR/base
+  images and RF produces 2048px outputs for comparison with existing LUA/LSRNA
+  generated x2 panels.
 - Images are center-cropped to a multiple compatible with the scale and VAE.
 
 ## Metric Target

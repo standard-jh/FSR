@@ -9,16 +9,16 @@ This repository packages an overnight experiment that asks a narrow question:
 > features, then use that field in one step at inference?
 
 The short answer from this run is **yes, at the selected decoder cut `f3`
-(`decoder.up_blocks.1`) the learned vector field clearly improves over feature
-bicubic, and the one-step result is close to or slightly better than four-step
-Euler on PSNR/L1**.
+(`decoder.up_blocks.1`) the learned one-step vector field clearly improves over
+feature bicubic, reaches the same rough x2 quality range as our local LUA
+benchmark, and is well above the current LSRNA x2 snapshot in this workspace**.
+Four-step Euler is kept only as a diagnostic check of the learned field, not as
+the headline comparison.
 
 This is not a diffusion-UNet SR method. It does not use a pretrained denoising
 UNet, does not call `scheduler.add_noise()`, and does not feed decoder features
 into SDXL, SD2.1, or FLUX denoisers. The learned module is a lightweight vector
 field trained directly in decoder feature space.
-
-![Set5 final contact sheet](assets/set5_contact_sheet_step_6063.png)
 
 ## What Problem Is This Solving?
 
@@ -70,8 +70,8 @@ f_hat = f_B + v_theta(f_B, t=0, cond=f_B)
 x_hat = D_>k(f_hat)
 ```
 
-We also evaluate two-step/four-step Euler and stochastic one-step variants for
-diagnostics.
+We also recorded two-step/four-step Euler and stochastic one-step variants for
+diagnostics, but the reported method is the one-step path above.
 
 ## Method Summary
 
@@ -108,11 +108,17 @@ Validation/evaluation:
 - Set14
 - B100
 - Urban100
+- Manga109
+- FLUX179 generated images
 
-Metrics in this repository are primarily reported against the FLUX VAE
-reconstruction target `x_H_rec`. Raw-HR metrics are also logged in the raw CSVs,
-but VAE-target metrics are the cleaner measurement for this experiment because
-the model is explicitly asked to move along the frozen decoder feature manifold.
+Metrics in this repository are reported in two ways:
+
+- Primary experiment metrics compare to the FLUX VAE reconstruction target
+  `x_H_rec`, because the model is explicitly trained to move along the frozen
+  decoder feature manifold.
+- Cross-method metrics compare to raw HR so the result can be read beside local
+  LUA and LSRNA x2 benchmark summaries. Those numbers are useful context, but
+  are not a strict leaderboard because the evaluators and VAE backbones differ.
 
 ## Cut Probe
 
@@ -165,52 +171,118 @@ https://wandb.ai/standard_juhwan/feature-rectified-flow-sr/runs/sc1t0349
 
 ## Results
 
-The important morning comparison was:
+The main result is the one-step feature-space rectified flow. Four-step Euler is
+not used as a headline baseline; it is saved separately in
+`results/tables/diagnostic_four_step.csv`.
 
-```text
-feature bicubic vs RF one-step vs RF four-step
-```
+### Primary VAE-Target Result
 
-All values below are VAE-target metrics.
+These values measure the experiment on its intended target, the FLUX VAE
+reconstruction `x_H_rec`.
 
 | Dataset | Method | PSNR | SSIM | RGB L1 | LPIPS |
 |---|---|---:|---:|---:|---:|
 | Set5 | feature bicubic | 24.606 | 0.6974 | 0.07898 | 0.15612 |
 | Set5 | RF one-step | 28.478 | 0.8301 | 0.04984 | 0.07966 |
-| Set5 | RF four-step | 28.406 | 0.8291 | 0.05026 | 0.07698 |
 | Set14 | feature bicubic | 22.713 | 0.5895 | 0.09785 | 0.19393 |
 | Set14 | RF one-step | 26.161 | 0.7321 | 0.06857 | 0.09724 |
-| Set14 | RF four-step | 26.014 | 0.7315 | 0.06977 | 0.09133 |
 | B100 | feature bicubic | 22.465 | 0.5442 | 0.10204 | 0.23221 |
 | B100 | RF one-step | 25.516 | 0.6834 | 0.07373 | 0.14454 |
-| B100 | RF four-step | 25.347 | 0.6820 | 0.07528 | 0.13285 |
 | Urban100 | feature bicubic | 20.022 | 0.5595 | 0.12862 | - |
 | Urban100 | RF one-step | 24.114 | 0.7488 | 0.08163 | - |
-| Urban100 | RF four-step | 23.874 | 0.7484 | 0.08364 | - |
+| Manga109 | feature bicubic | 21.679 | 0.6991 | 0.09224 | 0.07181 |
+| Manga109 | RF one-step | 26.942 | 0.8508 | 0.05601 | 0.02019 |
+| FLUX179 | feature bicubic | 27.209 | 0.8106 | 0.04595 | 0.07732 |
+| FLUX179 | RF one-step | 30.964 | 0.8853 | 0.03075 | 0.02918 |
 
 Observations:
 
 - RF one-step improves strongly over feature bicubic on every benchmark.
-- RF four-step also improves strongly over feature bicubic, which suggests the
-  learned feature-space vector field is meaningful.
-- One-step is very close to four-step, and is slightly better on PSNR/L1 in this
-  run. Four-step tends to have slightly better LPIPS on some datasets.
-- This supports the one-step compression hypothesis for this f3 cut.
+- The gain is consistent across all local SR validation sets and the generated
+  FLUX179 set.
+- This supports the core hypothesis that a random-time rectified-flow objective
+  can learn a useful one-step transport field at the f3 decoder cut.
+
+### Contextual Comparison With LUA and LSRNA
+
+The table below uses raw-HR RGB metrics so the result can be read beside the
+local LUA/LSRNA benchmark files in this workspace. Interpret this as contextual:
+our RF row comes from this f3 experiment's raw-HR logs, LUA is a FLUX VAE x2
+benchmark with `crop_border=2`, and LSRNA is an SDXL VAE x2 benchmark.
+
+| Dataset | Ours RF 1-step RGB PSNR/SSIM | LUA x2 RGB PSNR/SSIM | LSRNA x2 RGB PSNR/SSIM |
+|---|---:|---:|---:|
+| Set5 | 28.026 / 0.8138 | 27.988 / 0.8297 | 15.772 / 0.3903 |
+| Set14 | 25.566 / 0.7058 | 26.085 / 0.7406 | 15.116 / 0.3744 |
+| B100 | 25.284 / 0.6742 | 25.850 / 0.7142 | 15.325 / 0.3709 |
+| Urban100 | 23.764 / 0.7381 | 24.985 / 0.7861 | 14.253 / 0.3965 |
+| Manga109 | 26.549 / 0.8382 | 27.468 / 0.8647 | 15.385 / 0.5344 |
+
+Takeaway:
+
+- Against LUA, RF one-step is essentially tied on Set5 RGB PSNR, and trails by
+  about 0.5 to 1.2 dB on Set14/B100/Urban100/Manga109.
+- Against this LSRNA snapshot, RF one-step is much stronger on all listed
+  datasets.
+- A strict paper-style comparison should re-run RF, LUA, and LSRNA through one
+  shared evaluator with the same crop border, color space, VAE backbone, and
+  output saving path.
+
+### Base Preservation and Detail
+
+To test the actual desired behavior, we added a post-hoc evaluator that measures
+whether the upsampled result still downscales back to the LR/base image while
+adding controlled high-frequency content.
+
+Macro average across Set5/Set14/B100/Urban100/Manga109:
+
+| Method | Raw RGB PSNR | Raw RGB SSIM | Base L1 RGB | Base Grad L1 |
+|---|---:|---:|---:|---:|
+| RF one-step | 25.837 | 0.7540 | 0.0300 | 0.0767 |
+| LUA x2 | 26.475 | 0.7871 | 0.0237 | 0.0155 |
+| LSRNA x2 | 15.170 | 0.4133 | 0.1123 | 0.0671 |
+
+For the generated FLUX179 images, we also ran RF in LR-only mode from a 1024px
+base to a 2048px output, matching the existing LUA/LSRNA generated visual
+comparison setup. On all 179 generated images:
+
+| Method | Base PSNR RGB | Base SSIM RGB | Base L1 RGB | HF Gain vs Base |
+|---|---:|---:|---:|---:|
+| feature bicubic | 31.380 | 0.9048 | 0.01533 | 1.758 |
+| RF one-step | 34.245 | 0.9460 | 0.01360 | 1.156 |
+
+On the shared 5-image generated visual subset:
+
+| Method | Base PSNR RGB | Base SSIM RGB | Base L1 RGB | HF Gain vs Bicubic |
+|---|---:|---:|---:|---:|
+| bicubic x2 | 41.937 | 0.9875 | 0.00426 | 1.000 |
+| RF one-step | 33.784 | 0.9153 | 0.01378 | 1.285 |
+| LUA x2 | 34.279 | 0.9185 | 0.01307 | 0.992 |
+| LSRNA x2 | 9.673 | 0.3717 | 0.25925 | 1.609 |
+
+This is the most relevant qualitative signal: RF is close to LUA in base
+preservation on generated x2 samples, while increasing high-frequency energy
+more than LUA. LSRNA has strong high-frequency change but poor base
+preservation in this generated visual subset.
 
 ## Visuals
 
-Set5 butterfly final comparison:
+Representative images are committed under `assets/`. The Set5 butterfly grid is
+a diagnostic artifact from the run and includes extra columns such as four-step
+Euler and feature-delta maps; the main comparison in this README is the table
+above against LUA and LSRNA.
 
-![Set5 butterfly](assets/set5_butterfly_step_6063.png)
+Generated FLUX x2 comparison:
 
-Urban100 sample outputs are included as separate files, not as a huge panel:
+![Generated FLUX x2 comparison](assets/generated_flux179_rf_lua_lsrna/img_0000000_rf_lua_lsrna_panel.png)
+
+Urban100 sample outputs are included as separate files, not as a huge panel.
 
 ```text
 assets/urban100_samples/
   img001_vae_target.png
   img001_feature_bicubic.png
   img001_rf_1step.png
-  img001_rf_4step.png
 ```
 
 The full local Urban100 export from the run was stored outside this repo at:
@@ -256,6 +328,17 @@ The actual resumed main run used:
 bash configs/resume_f3_main.sh
 ```
 
+Post-hoc base/detail evaluation:
+
+```bash
+python scripts/evaluate_base_detail_rf.py \
+  --checkpoint runs/feature_rectified_flow_x2_f3_resume_bench_wandb/train_main/checkpoints/last.pt \
+  --output_dir runs/feature_rectified_flow_x2_f3_base_detail_eval \
+  --enable_gate \
+  --paired_roots Set5=/path/to/Set5 Set14=/path/to/Set14 B100=/path/to/B100 Urban100=/path/to/Urban100 Manga109=/path/to/Manga109 \
+  --generated_root /path/to/flux_random_1024_merged_179/images
+```
+
 The script writes:
 
 ```text
@@ -276,6 +359,7 @@ Checkpoints are intentionally ignored by git. Put them under `checkpoints/` or
 
 ```text
 scripts/train_feature_rectified_flow_sr.py  # main experiment script
+scripts/evaluate_base_detail_rf.py          # post-hoc base/detail evaluator
 configs/                                # runnable command templates
 docs/                                   # formulation and experiment notes
 assets/                                 # representative visual outputs
@@ -298,8 +382,8 @@ results/tables/                         # compact human-readable tables
 1. Train a reduced f4 variant: `hr_size=384`, `hidden_channels=64/96`,
    `num_blocks=4`, `pixel_loss_every=4`.
 2. Add tiled f3/f4 inference for 4096 outputs.
-3. Compare x2 RF vs LUA vs SwinIR under a fixed raw-HR benchmark protocol.
-4. Add a distilled one-step consistency term if a future four-step run beats
-   one-step more clearly.
+3. Re-run x2 RF, LUA, and LSRNA under a fixed raw-HR benchmark protocol.
+4. Add a stricter one-step consistency or distillation term only if diagnostic
+   multi-step sampling starts to beat one-step clearly.
 5. Save model cards/checkpoints through Git LFS or Hugging Face Hub if this is
    shared publicly.

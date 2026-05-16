@@ -1,0 +1,7 @@
+dataset,mode,psnr_vs_vae,ssim_vs_vae,rgb_l1_vs_vae,lpips_vs_vae,notes
+Set5,rf_4step,28.406,0.8291,0.05026,0.07698,diagnostic 4-step Euler in f3 feature space
+Set14,rf_4step,26.014,0.7315,0.06977,0.09133,diagnostic 4-step Euler in f3 feature space
+B100,rf_4step,25.347,0.6820,0.07528,0.13285,diagnostic 4-step Euler in f3 feature space
+Urban100,rf_4step,23.874,0.7484,0.08364,,diagnostic 4-step Euler in f3 feature space
+Manga109,rf_4step,26.706,0.8492,0.05754,0.02023,diagnostic 4-step Euler in f3 feature space
+FLUX179,rf_4step,30.704,0.8839,0.03211,0.02769,diagnostic 4-step Euler in f3 feature space

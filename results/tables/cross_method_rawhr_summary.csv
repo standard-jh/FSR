@@ -1,0 +1,16 @@
+dataset,method,protocol,psnr_rgb,ssim_rgb,psnr_y,ssim_y,notes
+Set5,DecoderFeatureFlowSR RF one-step,raw HR RGB from this run; RF target is FLUX VAE reconstruction,28.023959,0.813703,,,f3 one-step feature rectified flow
+Set5,LUA x2,raw HR benchmark crop_border=2,27.987948,0.829716,30.60971634259688,0.8827096071778431,FLUX VAE LUA x2 benchmark
+Set5,LSRNA x2,raw HR benchmark crop_border=2,15.772142,0.390265,17.955778697952326,0.5290983655431043,SDXL VAE LSRNA x2 benchmark; contextual only
+Set14,DecoderFeatureFlowSR RF one-step,raw HR RGB from this run; RF target is FLUX VAE reconstruction,25.565366,0.705749,,,f3 one-step feature rectified flow
+Set14,LUA x2,raw HR benchmark crop_border=2,26.085067,0.740613,28.24654189399305,0.7914975986506133,FLUX VAE LUA x2 benchmark
+Set14,LSRNA x2,raw HR benchmark crop_border=2,15.115699,0.374423,17.292153963891995,0.4565401450569401,SDXL VAE LSRNA x2 benchmark; contextual only
+B100,DecoderFeatureFlowSR RF one-step,raw HR RGB from this run; RF target is FLUX VAE reconstruction,25.284261,0.67418,,,f3 one-step feature rectified flow
+B100,LUA x2,raw HR benchmark crop_border=2,25.85043,0.71417,27.37656758892645,0.7441551355096939,FLUX VAE LUA x2 benchmark
+B100,LSRNA x2,raw HR benchmark crop_border=2,15.324637,0.370936,17.278808900877433,0.4332791002566195,SDXL VAE LSRNA x2 benchmark; contextual only
+Urban100,DecoderFeatureFlowSR RF one-step,raw HR RGB from this run; RF target is FLUX VAE reconstruction,23.763718,0.738146,,,f3 one-step feature rectified flow
+Urban100,LUA x2,raw HR benchmark crop_border=2,24.985362,0.786103,26.774083998841373,0.8168910681614665,FLUX VAE LUA x2 benchmark
+Urban100,LSRNA x2,raw HR benchmark crop_border=2,14.253205,0.396492,16.230986170998193,0.4553670861866848,SDXL VAE LSRNA x2 benchmark; contextual only
+Manga109,DecoderFeatureFlowSR RF one-step,raw HR RGB from this run; RF target is FLUX VAE reconstruction,26.549028,0.838172,,,f3 one-step feature rectified flow
+Manga109,LUA x2,raw HR benchmark crop_border=2,27.468016,0.864717,30.18943848365065,0.9106227086488616,FLUX VAE LUA x2 benchmark
+Manga109,LSRNA x2,raw HR benchmark crop_border=2,15.384963,0.534405,17.927354274575272,0.6061532011854884,SDXL VAE LSRNA x2 benchmark; contextual only
