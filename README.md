@@ -290,6 +290,30 @@ preservation on generated x2 samples, while increasing high-frequency energy
 more than LUA. LSRNA has strong high-frequency change but poor base
 preservation in this generated visual subset.
 
+### OpenImages-Reference Distribution Metrics
+
+We also computed Inception-space FID/KID and patch-level pFID/pKID against the
+cached real OpenImages HR feature distribution used by the local LUA evaluation.
+This table uses the shared generated visual subset where RF, LUA, and LSRNA
+outputs all exist (`n=5` images, `80` generated patches), so it is a diagnostic
+distribution check rather than a leaderboard.
+
+![OpenImages visual5 FID/KID](assets/openimages_visual5_fid_kid.png)
+
+| Method | FID | KID x1000 | pFID | pKID x1000 |
+|---|---:|---:|---:|---:|
+| bicubic x2 | 472.6 | 58.1 | 236.2 | 45.1 |
+| RF one-step | 475.2 | 56.5 | 229.6 | 42.1 |
+| LUA x2 | 479.9 | 64.0 | 252.8 | 56.4 |
+| LSRNA x2 | 419.3 | 34.1 | 211.7 | 24.8 |
+
+The important reading is the tension between distribution realism and base
+preservation. LSRNA looks best by OpenImages FID/KID because it drifts toward a
+more photo-real distribution, but the base/detail table above shows that this
+comes with large content drift. RF is slightly better than LUA on patch
+distribution metrics in this tiny subset while preserving the generated base far
+better than LSRNA.
+
 ## Visuals
 
 Representative images are committed under `assets/`. The Set5 butterfly grid is
@@ -301,16 +325,16 @@ Representative base/detail crop:
 
 ![Representative base/detail crop](assets/representative_base_detail_crop.png)
 
-For `img_0000000` from the generated FLUX visual subset, RF one-step preserves
+For `img_0000003` from the generated FLUX visual subset, RF one-step preserves
 the base nearly as well as LUA while adding more local high-frequency energy:
-RF has base L1 `0.0113` and HF gain `1.61x`; LUA has base L1 `0.0091` and HF
-gain `0.71x`; LSRNA reaches HF gain `1.90x` but drifts far from the base
-(base L1 `0.2832`). This is the behavior we wanted to isolate: detail creation
+RF has base L1 `0.0158` and HF gain `1.19x`; LUA has base L1 `0.0190` and HF
+gain `1.08x`; LSRNA reaches HF gain `1.62x` but drifts far from the base
+(base L1 `0.1752`). This is the behavior we wanted to isolate: detail creation
 inside the latent/decoder-feature path without losing the generated base.
 
-Generated FLUX x2 comparison:
+Generated FLUX x2 comparison for the same `img_0000003` sample:
 
-![Generated FLUX x2 comparison](assets/generated_flux179_rf_lua_lsrna/img_0000000_rf_lua_lsrna_panel.png)
+![Generated FLUX x2 comparison](assets/generated_flux179_rf_lua_lsrna/img_0000003_rf_lua_lsrna_panel.png)
 
 Urban100 sample outputs are included as separate files, not as a huge panel.
 
@@ -381,6 +405,13 @@ Rebuild README figures and the training-cost table:
 python scripts/make_representative_figures.py
 ```
 
+Compute the OpenImages-reference FID/KID diagnostic for the shared generated
+visual subset:
+
+```bash
+python scripts/evaluate_openimages_visual_subset_metrics.py
+```
+
 The main training script writes:
 
 ```text
@@ -402,6 +433,7 @@ Checkpoints are intentionally ignored by git. Put them under `checkpoints/` or
 ```text
 scripts/train_feature_rectified_flow_sr.py  # main experiment script
 scripts/evaluate_base_detail_rf.py          # post-hoc base/detail evaluator
+scripts/evaluate_openimages_visual_subset_metrics.py  # FID/KID diagnostic
 scripts/make_representative_figures.py      # README figures and training-cost chart
 configs/                                # runnable command templates
 docs/                                   # formulation and experiment notes

@@ -1,0 +1,74 @@
+{
+  "samples": [
+    "img_0000000",
+    "img_0000001",
+    "img_0000002",
+    "img_0000003",
+    "img_0000004"
+  ],
+  "real_feature_dir": "/home/juhwan/Documents/sr/latent_sr/LUA/experiments/eval_flux_latent_4096_real_openimages_metrics_179v150/features",
+  "plot_path": "/home/juhwan/Documents/sr/latent_sr/decoder-feature-flow-sr/assets/openimages_visual5_fid_kid.png",
+  "note": "Diagnostic only: RF/LUA/LSRNA shared subset has five generated images.",
+  "rows": [
+    {
+      "reference": "OpenImages HR real features",
+      "method": "bicubic_x2",
+      "n_real_images": 150,
+      "n_generated_images": 5,
+      "n_real_patches": 2400,
+      "n_generated_patches": 80,
+      "feature_dim": 2048,
+      "FID": 472.58856014154617,
+      "KID_mmd2": 0.05812611685576741,
+      "KID_x1000": 58.12611685576741,
+      "pFID": 236.20702536734316,
+      "pKID_mmd2": 0.045050074942645235,
+      "pKID_x1000": 45.05007494264524
+    },
+    {
+      "reference": "OpenImages HR real features",
+      "method": "RF one-step",
+      "n_real_images": 150,
+      "n_generated_images": 5,
+      "n_real_patches": 2400,
+      "n_generated_patches": 80,
+      "feature_dim": 2048,
+      "FID": 475.1969041595984,
+      "KID_mmd2": 0.056461455730584476,
+      "KID_x1000": 56.461455730584476,
+      "pFID": 229.56966382352815,
+      "pKID_mmd2": 0.04212685746448974,
+      "pKID_x1000": 42.126857464489746
+    },
+    {
+      "reference": "OpenImages HR real features",
+      "method": "LUA x2",
+      "n_real_images": 150,
+      "n_generated_images": 5,
+      "n_real_patches": 2400,
+      "n_generated_patches": 80,
+      "feature_dim": 2048,
+      "FID": 479.93071309063725,
+      "KID_mmd2": 0.06399772528137104,
+      "KID_x1000": 63.997725281371046,
+      "pFID": 252.82320165905358,
+      "pKID_mmd2": 0.05639747922335525,
+      "pKID_x1000": 56.39747922335525
+    },
+    {
+      "reference": "OpenImages HR real features",
+      "method": "LSRNA x2",
+      "n_real_images": 150,
+      "n_generated_images": 5,
+      "n_real_patches": 2400,
+      "n_generated_patches": 80,
+      "feature_dim": 2048,
+      "FID": 419.31758163695037,
+      "KID_mmd2": 0.03409555899578898,
+      "KID_x1000": 34.09555899578898,
+      "pFID": 211.6813739813975,
+      "pKID_mmd2": 0.024840188368661753,
+      "pKID_x1000": 24.840188368661753
+    }
+  ]
+}

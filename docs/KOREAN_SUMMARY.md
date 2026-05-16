@@ -155,15 +155,36 @@ inference로도 돌렸습니다. 전체 179장 기준:
 high-frequency 변화량이 더 큽니다. 반면 이 LSRNA snapshot은 high-frequency
 변화는 크지만 global/base가 많이 바뀌는 쪽입니다.
 
+OpenImages real HR feature distribution을 reference로 둔 FID/KID/pFID/pKID도
+추가했습니다. RF/LUA/LSRNA 출력이 모두 있는 공통 subset이 5장뿐이라
+leaderboard가 아니라 diagnostic distribution check입니다.
+
+![OpenImages visual5 FID/KID](../assets/openimages_visual5_fid_kid.png)
+
+| Method | FID | KID x1000 | pFID | pKID x1000 |
+|---|---:|---:|---:|---:|
+| bicubic x2 | 472.6 | 58.1 | 236.2 | 45.1 |
+| RF one-step | 475.2 | 56.5 | 229.6 | 42.1 |
+| LUA x2 | 479.9 | 64.0 | 252.8 | 56.4 |
+| LSRNA x2 | 419.3 | 34.1 | 211.7 | 24.8 |
+
+여기서는 LSRNA가 FID/KID 기준으로 가장 좋게 나옵니다. 다만 이것은
+OpenImages real distribution에 가까워졌다는 뜻이지, 원래 generated base를
+잘 지켰다는 뜻은 아닙니다. 바로 위 base/detail table에서 보듯 LSRNA는
+base L1과 SSIM이 크게 나빠집니다. 따라서 이 결과는 "분포상 더 real-like한
+이미지"와 "원래 base를 유지하는 SR" 사이의 trade-off를 보여주는 보조 지표로
+해석하는 것이 맞습니다.
+
 대표 crop figure도 새로 만들었습니다.
 
 ![대표 base/detail crop](../assets/representative_base_detail_crop.png)
 
-이 그림은 FLUX179 visual subset의 `img_0000000`에서 sharp한 crop을 크게
-보여줍니다. RF one-step은 base L1 `0.0113`, HF gain `1.61x`이고,
-LUA는 base L1 `0.0091`, HF gain `0.71x`입니다. 즉 LUA가 base를 아주
-조금 더 잘 붙잡지만 detail 생성량은 RF가 더 큽니다. LSRNA는 HF gain이
-`1.90x`로 크지만 base L1이 `0.2832`라 전체 구조가 크게 달라집니다.
+이 그림은 FLUX179 visual subset의 `img_0000003`에서 underwater coral의
+sharp한 crop을 크게 보여줍니다. RF one-step은 base L1 `0.0158`,
+HF gain `1.19x`이고, LUA는 base L1 `0.0190`, HF gain `1.08x`입니다.
+즉 이 샘플에서는 RF가 base도 더 잘 지키고 detail 변화도 조금 더 큽니다.
+LSRNA는 HF gain이 `1.62x`로 크지만 base L1이 `0.1752`라 전체 구조가
+크게 달라집니다.
 우리가 원했던 "base를 유지하면서 decoder feature 쪽에서 detail이 생기는"
 주장을 한 장으로 보여주기 위한 대표 이미지입니다.
 

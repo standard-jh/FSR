@@ -149,15 +149,29 @@ On the shared generated 5-image visual subset, RF preserves base nearly as well
 as LUA while increasing high-frequency energy more than LUA. LSRNA changes
 global content in this subset, which shows up as very poor base PSNR/SSIM.
 
+OpenImages-reference distribution metrics on that same 5-image overlap:
+
+| Method | FID | KID x1000 | pFID | pKID x1000 |
+|---|---:|---:|---:|---:|
+| bicubic x2 | 472.6 | 58.1 | 236.2 | 45.1 |
+| RF one-step | 475.2 | 56.5 | 229.6 | 42.1 |
+| LUA x2 | 479.9 | 64.0 | 252.8 | 56.4 |
+| LSRNA x2 | 419.3 | 34.1 | 211.7 | 24.8 |
+
+This metric favors LSRNA because it moves toward a more real-image-like
+distribution, but the base/detail metrics show that this is achieved with large
+base drift. RF is slightly better than LUA on patch distribution metrics in this
+small diagnostic subset.
+
 Representative figure:
 
 ```text
 assets/representative_base_detail_crop.png
 ```
 
-For generated `img_0000000`, RF one-step has base L1 0.0113 and HF gain 1.61x,
-LUA has base L1 0.0091 and HF gain 0.71x, and LSRNA has base L1 0.2832 and HF
-gain 1.90x. This illustrates the intended regime: keep the base close while
+For generated `img_0000003`, RF one-step has base L1 0.0158 and HF gain 1.19x,
+LUA has base L1 0.0190 and HF gain 1.08x, and LSRNA has base L1 0.1752 and HF
+gain 1.62x. This illustrates the intended regime: keep the base close while
 creating decoder-feature detail.
 
 ## Interpretation

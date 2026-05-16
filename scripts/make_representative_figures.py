@@ -14,18 +14,18 @@ from PIL import Image, ImageDraw, ImageFont
 ROOT = Path(__file__).resolve().parents[1]
 WORKSPACE = ROOT.parent
 
-SAMPLE_ID = "img_0000000"
-CROP_BOX = (650, 700, 1130, 1180)  # x0, y0, x1, y1 in 2048-space.
+SAMPLE_ID = "img_0000003"
+CROP_BOX = (120, 1020, 680, 1580)  # x0, y0, x1, y1 in 2048-space.
 
 PATHS = {
     "Base x2": WORKSPACE
-    / "FALSR/output/flux_random_1024_merged_179_20260501/images/img_0000000.png",
+    / f"FALSR/output/flux_random_1024_merged_179_20260501/images/{SAMPLE_ID}.png",
     "RF one-step (ours)": WORKSPACE
-    / "runs/feature_rectified_flow_x2_f3_base_detail_eval/generated_rf_x2_outputs/img_0000000_rf_1step_x2.png",
+    / f"runs/feature_rectified_flow_x2_f3_base_detail_eval/generated_rf_x2_outputs/{SAMPLE_ID}_rf_1step_x2.png",
     "LUA x2": WORKSPACE
-    / "LUA/experiments/x2_visual_panels_featuresr_lua_swinir/raw_outputs/generated/img_0000000/lua2.png",
+    / f"LUA/experiments/x2_visual_panels_featuresr_lua_swinir/raw_outputs/generated/{SAMPLE_ID}/lua2.png",
     "LSRNA x2": WORKSPACE
-    / "LUA/experiments/x2_visual_panels_featuresr_lua_swinir_lsrna_prompt/raw_outputs/generated/img_0000000/lsrna_sdxl_trg2048.png",
+    / f"LUA/experiments/x2_visual_panels_featuresr_lua_swinir_lsrna_prompt/raw_outputs/generated/{SAMPLE_ID}/lsrna_sdxl_trg2048.png",
 }
 
 METRIC_CSV = ROOT / "results/tables/generated_flux179_visual5_x2_base_detail.csv"
@@ -112,7 +112,7 @@ def make_representative() -> None:
     draw.text((margin, 38), "Base-preserving detail synthesis in decoder feature space", fill=ink, font=font(54, True))
     draw.text(
         (margin, 106),
-        "FLUX179 generated sample, x2 upscaling. Crop highlights a sharp, high-frequency region.",
+        f"FLUX179 generated sample {SAMPLE_ID}, x2 upscaling. Crop highlights a sharp, high-frequency region.",
         fill=muted,
         font=font(30),
     )
